@@ -821,13 +821,12 @@ public record Function {
 					var func = R[inst.A];
 					if (func is not (FunctionCall or Closure)) {
 						if (inst.Opcode is Opcode.Call) {
-							R[inst.A] = new Dictionary<object, object?>();
-							for (var i = 1; i <= inst.C; ++i) {
+							for (var i = 0; i < inst.C; ++i) {
 								R[inst.A + i] = new Dictionary<object, object?>();
 							}
 						} else {
 							var returnResult = new List<object?>();
-							for (var i = 0; i <= inst.C; ++i) {
+							for (var i = 0; i < inst.C; ++i) {
 								returnResult.Add(new Dictionary<object, object?>());
 							}
 
