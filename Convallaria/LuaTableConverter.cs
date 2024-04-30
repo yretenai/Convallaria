@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 namespace Convallaria;
 
 public class LuaTableSerializer : JsonConverter<Dictionary<object, object?>> {
-	public override Dictionary<object, object?>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+	public override Dictionary<object, object?> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
 		var dict = new Dictionary<object, object?>();
 		switch (reader.TokenType) {
 			case JsonTokenType.StartArray: {

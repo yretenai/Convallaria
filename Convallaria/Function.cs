@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Convallaria;
@@ -340,7 +341,7 @@ public record Function {
 			       MetaEvent.Power => Math.Pow(vL, vR),
 			       MetaEvent.Divide => vL / vR,
 			       MetaEvent.UnaryMinus => -vL,
-			       _ => DoMathI(method, lhs, rhs)
+			       _ => DoMathI(method, lhs, rhs),
 		       };
 	}
 
@@ -371,7 +372,7 @@ public record Function {
 			       MetaEvent.ShiftRight => vL >> (int) vR,
 			       MetaEvent.UnaryMinus => -vL,
 			       MetaEvent.BitwiseNOT => ~vL,
-			       _ => 0
+			       _ => 0,
 		       };
 	}
 
