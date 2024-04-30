@@ -807,7 +807,7 @@ public record Function {
 					break;
 				}
 				case Opcode.TestSet: {
-					var pass = R[inst.B] is true or 1 or 1u or 1.0 or 1.0d;
+					var pass = R[inst.B] is not (null or 0);
 					if (pass != inst.K) {
 						pc++;
 					} else {
