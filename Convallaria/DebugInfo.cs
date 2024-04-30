@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Convallaria;
 
@@ -36,4 +37,6 @@ public record DebugInfo {
 	public List<LineInfo> AbsLineInfo { get; } = [];
 	public List<LocVariable> LocVarInfo { get; } = [];
 	public List<string> UpValueNames { get; } = [];
+
+	public override string ToString() => $"UpValNames: [{string.Join(", ", UpValueNames)}], VarNames: [{string.Join(", ", LocVarInfo.Select(x => x.VarName))}]";
 }
