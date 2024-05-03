@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Convallaria;
 
@@ -9,5 +10,24 @@ public static class Extensions {
 		}
 
 		return val;
+	}
+
+	public static Dictionary<object, object?>? RemoveClosures(this Dictionary<object, object?>? table) {
+		if (table == null) {
+			return table;
+		}
+
+		foreach (var (key, value) in table) {
+			switch (value) {
+				case Closure or FunctionCall:
+					table.Remove(key);
+					continue;
+				case Dictionary<object, object?> subTable:
+					RemoveClosures(subTable);
+					break;
+			}
+		}
+
+		return table;
 	}
 }
