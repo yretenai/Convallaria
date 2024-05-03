@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Convallaria;
@@ -558,9 +557,21 @@ public record Function {
 						throw new InvalidOperationException("self null");
 					}
 
-					R[inst.A + 1] = R[inst.B];
-					if (R[inst.B] is Dictionary<object, object?> obj) {
-						R[inst.A] = obj.GetValueOrDefault(key, null);
+					var self = R[inst.B];
+					R[inst.A + 1] = self;
+					switch (self) {
+						case Dictionary<object, object?> obj: {
+							R[inst.A] = obj.GetValueOrDefault(key, null);
+							break;
+						}
+						case null: {
+							break;
+						}
+						default: {
+							var t = self.GetType();
+							Console.Error.WriteLine($"unhandled self call {(t == typeof(Dictionary<object, object?>) ? "Table" : t.Name)}.{key}");
+							break;
+						}
 					}
 
 					break;
@@ -856,7 +867,7 @@ public record Function {
 					}
 
 					for (var i = 0; i < inst.C; ++i) {
-						R[inst.A - inst.C + i] = i < result.Count ? result[i] : new Dictionary<object, object?>();
+						R[inst.A + i] = i < result.Count ? result[i] : new Dictionary<object, object?>();
 					}
 
 					break;
