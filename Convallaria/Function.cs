@@ -191,7 +191,7 @@ public record Function {
 			upv = upvalues[..upvC];
 		}
 
-		for (var i = 0; i < Math.Min(args.Length, MaxStackSize); ++i) {
+		for (var i = 0; i < Math.Min(args.Length, NumParams); ++i) {
 			R[i] = args[i];
 		}
 
