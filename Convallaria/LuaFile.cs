@@ -3,6 +3,7 @@ namespace Convallaria;
 public record LuaFile {
 	public LuaFile(ILuaReader reader) {
 		Header = reader.Read<Header>();
+		Header.Validate();
 		UpValueCount = reader.ReadByte();
 		Entry = new Function(this, reader);
 	}

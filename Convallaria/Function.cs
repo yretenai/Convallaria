@@ -38,10 +38,10 @@ public record Function {
 					Constants.Add(true);
 					break;
 				case LuaValueType.Float:
-					Constants.Add(Root.Header.NumberSize == 4 ? reader.Read<float>() : reader.Read<double>());
+					Constants.Add(reader.Read<double>());
 					break;
 				case LuaValueType.Int:
-					Constants.Add(Root.Header.IntSize == 4 ? reader.Read<int>() : reader.Read<long>());
+					Constants.Add(reader.Read<long>());
 					break;
 				case LuaValueType.ShortString:
 				case LuaValueType.LongString:

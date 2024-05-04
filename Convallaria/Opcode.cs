@@ -1,5 +1,6 @@
 namespace Convallaria;
 
+// @formatter:off
 public enum Opcode : byte {
 	Move,		// A B      R[A] := R[B]
 	LoadI,		// A sBx    R[A] := sBx
@@ -85,3 +86,4 @@ public enum Opcode : byte {
 	VarargPrep,	// A        (adjust vararg parameters)
 	ExtraArg,	// Ax       extra (larger) argument for previous opcode
 }
+// @formatter:on
