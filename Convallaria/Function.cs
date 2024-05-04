@@ -85,7 +85,7 @@ public record Function {
 
 		if (Upvalues.Length > 0) {
 			sb.AppendLine();
-			for(var i = 0; i < Upvalues.Length; ++i) {
+			for (var i = 0; i < Upvalues.Length; ++i) {
 				sb.AppendLine($"// upval {i}: {Upvalues.Span[i]} {Debug.UpValueNames.ElementAtOrDefault(i) ?? "unnamed"}");
 			}
 		}
@@ -434,6 +434,7 @@ public record Function {
 					for (var i = 0; i < inst.B; i++) {
 						R[inst.A + i + 1] = null;
 					}
+
 					break;
 				}
 				case Opcode.GetUpval: {
@@ -843,6 +844,7 @@ public record Function {
 
 							return returnResult;
 						}
+
 						break;
 					}
 

@@ -28,9 +28,7 @@ public class LuaReader(ReadOnlyMemory<byte> Data) : ILuaReader {
 		return value;
 	}
 
-	public virtual byte ReadByte() {
-		return Data.Span[Offset++];
-	}
+	public virtual byte ReadByte() => Data.Span[Offset++];
 
 	public virtual T Read<T>() where T : struct {
 		var value = MemoryMarshal.Read<T>(Data.Span[Offset..]);
