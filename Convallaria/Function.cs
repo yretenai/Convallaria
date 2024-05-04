@@ -178,7 +178,6 @@ public record Function {
 #if !DEBUG
 	[MethodImpl(MethodImplOptions.AggressiveOptimization)]
 #endif
-	// ReSharper disable once UnusedMethodReturnValue.Global
 	public List<object?> RunVM(int pc, object?[] args, object?[] upvalues) {
 		var R = new object?[MaxStackSize];
 		var upvC = Math.Max(Upvalues.Length, Root.UpValueCount);
@@ -190,6 +189,10 @@ public record Function {
 			}
 		} else {
 			upv = upvalues[..upvC];
+		}
+
+		for (var i = 0; i < Math.Min(args.Length, MaxStackSize); ++i) {
+			R[i] = args[i];
 		}
 
 		for (; pc < Instructions.Length; pc++) {
