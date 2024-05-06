@@ -1,20 +1,18 @@
-using System.Collections.Generic;
-
 namespace Convallaria;
 
 public static class ConvallariaHelpers {
-	public static Dictionary<object, object?>? RemoveClosures(Dictionary<object, object?>? table) {
+	public static Table? RemoveClosures(Table? table) {
 		if (table == null) {
 			return table;
 		}
 
-		var newTable = new Dictionary<object, object?>();
+		var newTable = new Table();
 
 		foreach (var (key, value) in table) {
 			switch (value) {
 				case Closure or FunctionCall:
 					continue;
-				case Dictionary<object, object?> subTable:
+				case Table subTable:
 					newTable[key] = RemoveClosures(subTable);
 					break;
 				default:

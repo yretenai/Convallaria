@@ -257,7 +257,7 @@ public record Function {
 				}
 				case Opcode.GetTabUp: {
 					var up = upv[inst.B];
-					if (up is not Dictionary<object, object?> obj) {
+					if (up is not Table obj) {
 						throw new InvalidOperationException("get tab upval not on table");
 					}
 
@@ -271,7 +271,7 @@ public record Function {
 				}
 				case Opcode.GetTable: {
 					var b = R[inst.B];
-					if (b is not Dictionary<object, object?> obj) {
+					if (b is not Table obj) {
 						throw new InvalidOperationException("get tab upval not on table");
 					}
 
@@ -282,7 +282,7 @@ public record Function {
 				case Opcode.GetI: {
 					var b = R[inst.B];
 					var c = (long) inst.C;
-					var v = b is not Dictionary<object, object?> obj ? null : obj.GetValueOrDefault(c, null);
+					var v = b is not Table obj ? null : obj.GetValueOrDefault(c, null);
 					R[inst.A] = v;
 					break;
 				}
@@ -290,7 +290,7 @@ public record Function {
 					var b = R[inst.B];
 					var c = Constants[(int) inst.C];
 					object? v;
-					if (c is null || b is not Dictionary<object, object?> obj) {
+					if (c is null || b is not Table obj) {
 						v = null;
 					} else {
 						v = obj.GetValueOrDefault(c, null);
@@ -301,7 +301,7 @@ public record Function {
 				}
 				case Opcode.SetTabup: {
 					var up = upv[inst.A];
-					if (up is not Dictionary<object, object?> obj) {
+					if (up is not Table obj) {
 						throw new InvalidOperationException("set tab upval not on table");
 					}
 
@@ -314,7 +314,7 @@ public record Function {
 					break;
 				}
 				case Opcode.SetTable: {
-					if (R[inst.A] is not Dictionary<object, object?> obj) {
+					if (R[inst.A] is not Table obj) {
 						throw new InvalidOperationException("set field not on table");
 					}
 
@@ -327,7 +327,7 @@ public record Function {
 					break;
 				}
 				case Opcode.SetI: {
-					if (R[inst.A] is not Dictionary<object, object?> obj) {
+					if (R[inst.A] is not Table obj) {
 						throw new InvalidOperationException("set field not on table");
 					}
 
@@ -335,7 +335,7 @@ public record Function {
 					break;
 				}
 				case Opcode.SetField: {
-					if (R[inst.A] is not Dictionary<object, object?> obj) {
+					if (R[inst.A] is not Table obj) {
 						throw new InvalidOperationException("set field not on table");
 					}
 
@@ -354,7 +354,7 @@ public record Function {
 						size += Instructions.Span[pc].Ax * 256;
 					}
 
-					var dict = new Dictionary<object, object?>();
+					var dict = new Table();
 					for (var i = 0L; i < size; ++i) {
 						dict[i + 1] = null;
 					}
@@ -371,7 +371,7 @@ public record Function {
 					var self = R[inst.B];
 					R[inst.A + 1] = self;
 					switch (self) {
-						case Dictionary<object, object?> obj: {
+						case Table obj: {
 							R[inst.A] = obj.GetValueOrDefault(key, null);
 							break;
 						}
@@ -380,7 +380,7 @@ public record Function {
 						}
 						default: {
 							var t = self.GetType();
-							Console.Error.WriteLine($"unhandled self call {(t == typeof(Dictionary<object, object?>) ? "Table" : t.Name)}.{key}");
+							Console.Error.WriteLine($"unhandled self call {(t == typeof(Table) ? "Table" : t.Name)}.{key}");
 							break;
 						}
 					}
@@ -489,7 +489,7 @@ public record Function {
 					break;
 				}
 				case Opcode.Len: {
-					if (R[inst.B] is not Dictionary<object, object?> obj) {
+					if (R[inst.B] is not Table obj) {
 						R[inst.A] = 0L;
 					} else {
 						R[inst.A] = (long) obj.Count;
@@ -498,7 +498,7 @@ public record Function {
 					break;
 				}
 				case Opcode.Concat: {
-					var dict = new Dictionary<object, object?>();
+					var dict = new Table();
 					for (var i = 0L; i < inst.B; ++i) {
 						dict[i + 1] = R[inst.A + i];
 					}
@@ -644,12 +644,12 @@ public record Function {
 					if (func is not (FunctionCall or Closure)) {
 						if (inst.Opcode is Opcode.Call) {
 							for (var i = 0; i < inst.C; ++i) {
-								R[inst.A + i] = new Dictionary<object, object?>();
+								R[inst.A + i] = new Table();
 							}
 						} else {
 							var returnResult = new List<object?>();
 							for (var i = 0; i < inst.C; ++i) {
-								returnResult.Add(new Dictionary<object, object?>());
+								returnResult.Add(new Table());
 							}
 
 							return returnResult;
@@ -679,7 +679,7 @@ public record Function {
 					}
 
 					for (var i = 0; i < inst.C; ++i) {
-						R[inst.A + i] = i < result.Count ? result[i] : new Dictionary<object, object?>();
+						R[inst.A + i] = i < result.Count ? result[i] : new Table();
 					}
 
 					break;
@@ -747,7 +747,7 @@ public record Function {
 						break;
 					}
 
-					if (R[inst.A] is not Dictionary<object, object?> obj) {
+					if (R[inst.A] is not Table obj) {
 						throw new InvalidOperationException("set list not on table");
 					}
 
