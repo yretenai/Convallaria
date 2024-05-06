@@ -93,6 +93,13 @@ public record Function {
 			}
 		}
 
+		if (Debug.LocVarInfo.Count > 0) {
+			sb.AppendLine();
+			for (var i = 0; i < Debug.LocVarInfo.Count; ++i) {
+				sb.AppendLine($"// var {i}: {Debug.LocVarInfo[i]}");
+			}
+		}
+
 		sb.AppendLine();
 
 		foreach (var instruction in Instructions.Span) {
