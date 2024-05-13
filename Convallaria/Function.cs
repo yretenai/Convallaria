@@ -63,6 +63,7 @@ public record Function {
 	}
 
 	public string Source { get; }
+	public string? Name { get; set; }
 	public ulong LineDefined { get; }
 	public ulong LastLineDefined { get; }
 	public byte NumParams { get; }
@@ -82,8 +83,29 @@ public record Function {
 	[MethodImpl(MethodImplOptions.AggressiveOptimization)]
 #endif
 	public void DumpInstructions(StringBuilder sb) {
+		for (var index = 0; index < Instructions.Span.Length - 1; index++) {
+			var inst = Instructions.Span[index];
+			if (inst.Opcode is Opcode.Closure) {
+				var proto = Protos[(int) inst.Bx];
+				var next = Instructions.Span[index + 1];
+				switch (next.Opcode) {
+					case Opcode.SetField:
+					case Opcode.SetTabup:
+						if (Constants.Count > next.B) {
+							proto.Name = Constants[(int) next.B]?.StripNewlines() as string;
+						}
+
+						break;
+				}
+			}
+		}
+
+		if (Name?.Length > 0) {
+			sb.AppendLine($"// function {Name}");
+		}
+
 		if (Source.Length > 0) {
-			sb.AppendLine($"// function {Source}");
+			sb.AppendLine($"// source {Source}");
 		}
 
 		if (Upvalues.Length > 0) {

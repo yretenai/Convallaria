@@ -211,7 +211,7 @@ public readonly record struct Instruction {
 				sb.Append($"{op} {A} {B} {K} {C}");
 
 				if (constants.Count > B) {
-					sb.Append($" // \"{constants[(int) B].StripNewlines() ?? "<null>"}\"");
+					sb.Append($" // {constants[(int) B].StripNewlines() ?? "<null>"}");
 					if (K && constants.Count > C) {
 						sb.Append(" = ");
 						sb.Append(constants[(int) C].StripNewlines()?.ToString() ?? "<null>");
