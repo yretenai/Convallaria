@@ -280,7 +280,12 @@ public record Function {
 				case Opcode.GetTabUp: {
 					var up = upv[inst.B];
 					if (up is not Table obj) {
-						throw new InvalidOperationException("get tab upval not on table");
+						if (up == null) {
+							obj = new Table();
+							upv[inst.B] = obj;
+						} else {
+							throw new InvalidOperationException("get tab upval not on table");
+						}
 					}
 
 					var k = Constants[(int) inst.C];
@@ -294,7 +299,12 @@ public record Function {
 				case Opcode.GetTable: {
 					var b = R[inst.B];
 					if (b is not Table obj) {
-						throw new InvalidOperationException("get tab upval not on table");
+						if (b == null) {
+							obj = new Table();
+							R[inst.B] = obj;
+						} else {
+							throw new InvalidOperationException("get tab upval not on table");
+						}
 					}
 
 					var c = R[inst.C] ?? obj.Keys.LastOrDefault();
@@ -324,7 +334,12 @@ public record Function {
 				case Opcode.SetTabup: {
 					var up = upv[inst.A];
 					if (up is not Table obj) {
-						throw new InvalidOperationException("set tab upval not on table");
+						if (up == null) {
+							obj = new Table();
+							upv[inst.A] = obj;
+						} else {
+							throw new InvalidOperationException("set tab upval not on table");
+						}
 					}
 
 					var b = Constants[(int) inst.B];
@@ -336,8 +351,14 @@ public record Function {
 					break;
 				}
 				case Opcode.SetTable: {
-					if (R[inst.A] is not Table obj) {
-						throw new InvalidOperationException("set field not on table");
+					var ob = R[inst.A];
+					if (ob is not Table obj) {
+						if (ob == null) {
+							obj = new Table();
+							R[inst.A] = obj;
+						} else {
+							throw new InvalidOperationException("set field not on table");
+						}
 					}
 
 					var b = R[inst.B];
@@ -349,16 +370,28 @@ public record Function {
 					break;
 				}
 				case Opcode.SetI: {
-					if (R[inst.A] is not Table obj) {
-						throw new InvalidOperationException("set field not on table");
+					var ob = R[inst.A];
+					if (ob is not Table obj) {
+						if (ob == null) {
+							obj = new Table();
+							R[inst.A] = obj;
+						} else {
+							throw new InvalidOperationException("set field not on table");
+						}
 					}
 
 					obj[(long) inst.B] = inst.K ? Constants[(int) inst.C] : R[inst.C];
 					break;
 				}
 				case Opcode.SetField: {
-					if (R[inst.A] is not Table obj) {
-						throw new InvalidOperationException("set field not on table");
+					var ob = R[inst.A];
+					if (ob is not Table obj) {
+						if (ob == null) {
+							obj = new Table();
+							R[inst.A] = obj;
+						} else {
+							throw new InvalidOperationException("set field not on table");
+						}
 					}
 
 					var b = Constants[(int) inst.B];
@@ -769,8 +802,14 @@ public record Function {
 						break;
 					}
 
-					if (R[inst.A] is not Table obj) {
-						throw new InvalidOperationException("set list not on table");
+					var ob = R[inst.A];
+					if (ob is not Table obj) {
+						if (ob == null) {
+							obj = new Table();
+							R[inst.A] = obj;
+						} else {
+							throw new InvalidOperationException("set list not on table");
+						}
 					}
 
 					for (var i = 1L; i <= n; ++i) {
